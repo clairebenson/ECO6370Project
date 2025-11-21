@@ -28,7 +28,7 @@ tokenize_and_clean <- function(text) {
 st <- st %>%
   mutate(Text = map_chr(Text, tokenize_and_clean))
 
-### Rename columns to match Python code
+### Rename columns 
 st <- st %>%
   rename(
     date = Date
@@ -48,3 +48,16 @@ final_clean <- inner_join(st, sk, by = "date")
 
 ### Save merged dataset
 write_csv(final_clean, "final_clean.csv")
+
+#Defining positive and negative word lists
+Tadle_positive <- c("abating", "accelerated", "add", "advance", "advanced",
+              "augmented", "balanced", "better", "bolsters", "boom",
+              "booming", "boost", "boosted", "eased", "elevated", "elevating",
+              "expand", "expanding", "expansionary", "extend", "extended",
+              "fast", "faster", "firmer", "high", "higher", "improved",
+              "improvement", "improving", "increase", "increased", "increases", 
+              "increasing", "more", "raise", "rapid", "rebounded", "recovering",
+              "rise", "risen", "rising", "robust", "rose", "significant", 
+              "solid", "sooner", "spike", "spikes", "spiking", "stable", "strength",
+              "strengthen", "stengthened", "strengthens", "strong", "stronger",
+              "supportive", "up", "upside", "upsing", "uptick")
