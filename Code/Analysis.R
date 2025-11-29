@@ -2,6 +2,8 @@
             # Analysis #
 
 # Packages #
+install.packages (c(tidyverse, tokenizers, stringer, textstem, wordcloud, Mass, class, rpart, raondomForest, gbm, caret, broom))
+
 library(tidyverse)
 library(stringr)
 library(textstem)
