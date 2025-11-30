@@ -11,6 +11,8 @@ setwd("~/Angie/economia/masters/computacion/ECO6370Project/Data")
 st <- read_csv("communications.csv")
 sk <- read_csv("sap500.csv")
 
+statement <- subset(st, Type == "Statement")
+
 ### Remove unwanted columns 
 cols_to_delete <- c(3, 4, 6)
 sk <- sk[ , -cols_to_delete]
