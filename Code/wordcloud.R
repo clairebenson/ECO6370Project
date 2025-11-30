@@ -32,22 +32,24 @@ data("stop_words")           # viene con tidytext
 tokens_clean <- tokens %>%
   anti_join(stop_words, by = "word")
 
-#eliminate numerical and 1 letter words
+# 7) eliminate numerical and 1 letter words
 tokens_clean <- tokens_clean %>%
   filter(!str_detect(word, "^[0-9]+$")) %>%  # eliminar solo números
   filter(nchar(word) > 1)                    # eliminar tokens de 1 carácter
 
-# Lematizar (convert "running" -> "run", etc.)
+# 8) Lematizar (convert "running" -> "run", etc.)
 # textstem::lemmatize_words acepta un vector de palabras
 tokens_clean <- tokens_clean %>%
   mutate(lemma = lemmatize_words(word))
 
-#count frecuencies
+# 9) count frecuencies
 freq <- tokens_clean %>%
   count(lemma, sort = TRUE) %>%
   rename(word = lemma, freq = n)
 
 #add colors
+
+# 10) Generarate
 set.seed(123)
 wordcloud(
   words = freq$word,
@@ -55,8 +57,6 @@ wordcloud(
   max.words = 150,
   random.order = FALSE,
   scale = c(4, 0.5),
-  colors = brewer.pal(8, "Dark2")   # ← paleta de colores
+  colors = brewer.pal(8, "Dark2")
+  
 )
-
-
-ggsave("~/Angie/economia/masters/computacion/ECO6370Project/Results/wordcloud_cl.png", width = 10, height = 7, dpi = 300)
