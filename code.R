@@ -10,7 +10,7 @@ st <- read_csv("communications.csv")
 sk <- read_csv("sap500.csv")
 
 ### Remove unwanted columns 
-cols_to_delete <- c(3, 4, 6, 8)
+cols_to_delete <- c(3, 4, 6)
 sk <- sk[ , -cols_to_delete]
 
 ### Text Cleaning Function
