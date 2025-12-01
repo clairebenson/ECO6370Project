@@ -1,9 +1,13 @@
 # Sentiment Scoring 
 
 # packages #
+<<<<<<< HEAD
 
 install.packages (c("tidyverse", "tokenizers", "stringer", "textstem", "wordcloud", "Mass", "class", "rpart", "raondomForest", "gbm", "caret", "broom"))
 
+=======
+install.packages (c("tidyverse", "tokenizers", "stringer", "textstem", "wordcloud", "Mass", "class", "rpart", "raondomForest", "gbm", "caret", "broom"))
+>>>>>>> 821a5adccb2691a7f6f5c0f6069d8133ec0a20bc
 library(tidyverse)
 library(tokenizers)   # sentence tokenization
 library(stringr)      
@@ -108,4 +112,3 @@ final_clean <- final_clean %>% mutate(spchange = case_when(`changepercent` < 0 ~
 
 # save data 
 write.csv(final_clean, "final_clean.csv", row.names = FALSE)
-
