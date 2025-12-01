@@ -11,12 +11,12 @@ library(wordcloud)
 
 # Models
 library(MASS)         
-library(class)        # kNN
-library(rpart)        # decision tree
-library(randomForest) # random forest
-library(gbm)          # gradient boosting
-library(caret)        # train/test split & CV
-library(broom)        # tidy model output
+library(class)        
+library(rpart)        
+library(randomForest) 
+library(gbm)         
+library(caret)        
+library(broom)        
 
 # analysis data#
 
