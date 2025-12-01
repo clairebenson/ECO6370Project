@@ -104,5 +104,7 @@ final_clean$changepercent = ((final_clean$close - final_clean$open) / final_clea
 
 final_clean <- final_clean %>% mutate(spchange = case_when(`changepercent` < 0 ~ "down",`changepercent` == 0 ~ "zero",TRUE ~ "up"))
 
+final_clean$SPchange_Numerical <- ifelse(final_clean$spchange == "down", 1, 0)
+
 # save data 
 write.csv(final_clean, "final_clean.csv", row.names = FALSE)
