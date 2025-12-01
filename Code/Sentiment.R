@@ -110,4 +110,3 @@ final_clean <- final_clean %>% mutate(spchange = case_when(`changepercent` < 0 ~
 
 # save data 
 write.csv(final_clean, "final_clean.csv", row.names = FALSE)
-

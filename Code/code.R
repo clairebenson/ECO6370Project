@@ -6,7 +6,6 @@ library(stringr)
 #####determine folder for data
 setwd("~/Angie/economia/masters/computacion/ECO6370Project/Data")
 
-
 ### Importing datasets
 st <- read_csv("Data/communications.csv")
 sk <- read_csv("Data/sap500.csv")
