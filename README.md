@@ -84,7 +84,7 @@ source("Code/Analysis.R")
 
 ## Data Sources ##
 
-FOMC Minutes (2015–20225)
+FOMC Minutes (2000–20225)
 
 S&P 500 index historical Data
 
