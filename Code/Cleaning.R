@@ -2,26 +2,28 @@
           # Data Cleaning #
 
 # packages #
-install.packages (c(tidyverse, tokenizers, stringer, textstem, wordcloud, Mass, class, rpart, raondomForest, gbm, caret, broom))
+install.packages (c("tidyverse", "tokenizers", "stringer", "textstem", "wordcloud", "Mass", "class", "rpart", "raondomForest", "gbm", "caret", "broom"))
+
 library(tidyverse)
-library(tokenizers)   # sentence tokenization
-library(stringr)      # regex & str_squish
-library(textstem)     # lemmatization (lemmatize_words)
+library(tokenizers)  
+library(stringr)      
+library(textstem)     
 
 # data sets # 
-st <- read.csv("data/Fed_Scrape-2015-2023.csv", stringsAsFactors = FALSE)
-sk <- read.csv("data/SP500.csv", stringsAsFactors = FALSE)
+
+st <- read.csv("communications.csv", stringsAsFactors = FALSE)
+sk <- read.csv("sap500.csv", stringsAsFactors = FALSE)
 
 # FOMC data #
+statement <- subset(st, Type == "Statement")
 
 tokenize_and_clean <- function(text) {
-  # split into sentences
   sentences <- tokenize_sentences(text)[[1]]
   
   cleaned_sentences <- lapply(sentences, function(sent) {
     cleaned <- as.character(sent)
-    cleaned <- gsub("[^a-zA-Z\\s]", " ", cleaned)  # keep letters and spaces
-    cleaned <- str_squish(cleaned)                 # remove extra spaces
+    cleaned <- gsub("[^a-zA-Z\\s]", " ", cleaned)  
+    cleaned <- str_squish(cleaned)
     cleaned
   })
   
@@ -29,6 +31,7 @@ tokenize_and_clean <- function(text) {
 }
 
 # Apply to Text column
+statement <- subset(st, Type == "Statement")
 st_clean$Text <- vapply(
   st_clean$Text,
   tokenize_and_clean,
