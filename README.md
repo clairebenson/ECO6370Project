@@ -1,11 +1,8 @@
 
-<<<<<<< HEAD
-Hello world!
-=======
 # ECO6370Project #
+**Examining the Sentiment of FOMC Minutes and Its Association with Stock Market Prices**
 
-This repository contains all code and data for our ECO 6370 project:“Examining 
-the Sentiment of FOMC Minutes and Its Association with Stock Market Prices.”
+This repository contains the data, code, and analysis for our ECO6370 final project.
 
 Team members:
 
@@ -15,15 +12,16 @@ Team members:
 
 ## Project Overview ##
 
-This project investigates whether the tone and sentiment of Federal Open Market 
-Committee (FOMC) meeting minutes affect stock market behavior, focusing on the S&P 500.
+This project investigates whether and how the sentiment of statements from the 
+Federal Open Market Committee (FOMC) meetings influences movements in the S&P 500 stock 
+index price on the day of release.
 
-We:
-- Clean scrapped FOMC minutes
-- Clean an merge the data with S&P 500 movements
-- Compute sentiment scores using a lexicon-based method
+The workflow includes:
+- Cleaning scrapped FOMC statements
+- Cleaning S&P 500 price movement data
+- Compute sentiment scores using dictionary method 
 - Explore the data with wordclouds and visualizations
-- Run models to predict market movement using logistic regression and ML classifiers.
+- Run regression and classification models
 
 ## Repository Structure ##
 
@@ -31,13 +29,13 @@ We:
 ECO6370Project/
 │
 ├── Code/
-│     ├── cleaning.R              # Data import, cleaning, merging
-│     ├── sentiment_scoring.R     # Sentiment lexicon + scoring functions
-│     ├── analysis.R              # EDA, wordclouds, regression & ML models
+│     ├── cleaning.R              # Data cleaning 
+│     ├── sentiment.R     # Sentiment scoring
+│     ├── analysis.R              # Exploratory data analysis, regression & ML models
 │
 ├── Data/
-│     ├── Fed_Scrape-2015-2023.csv   # Raw FOMC scraped text
-│     ├── SP500.csv                  # Raw S&P 500 daily data
+│     ├── communications.csv   # Raw FOMC scraped text data
+│     ├── sap500.csv                  # Raw S&P 500 daily historical data
 │     ├── final_clean.csv            # Cleaned & merged dataset (produced by cleaning.R)
 │
 ├── Results/
@@ -86,11 +84,11 @@ source("Code/Analysis.R")
 
 ## Data Sources ##
 
-FOMC Minutes (2015–2023)
-- Scraped from Federal Reserve website by the team.
+FOMC Minutes (2015–20225)
 
-S&P 500 Stock Data
-- Daily open/close/change percentage provided in SP500.csv.
+S&P 500 index historical Data
+
+- Data source: kaggle for both.
 
 
 
