@@ -6,12 +6,9 @@ library(tidyverse)
 library(lubridate)
 library(stringr)
 
-<<<<<<< HEAD
 #####determine folder for data
 #setwd("~/Angie/economia/masters/computacion/ECO6370Project/Data")
 
-=======
->>>>>>> 821a5adccb2691a7f6f5c0f6069d8133ec0a20bc
 ### Importing datasets
 st <- read_csv("Data/communications.csv")
 sk <- read_csv("Data/sap500.csv")
