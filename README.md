@@ -1,6 +1,6 @@
 
 # ECO6370Project #
-**Examining the Sentiment of FOMC Minutes and Its Association with Stock Market Prices**
+**Examining the Sentiment of FOMC Statements and Its Association with Stock Market Prices**
 
 This repository contains the data, code, and analysis for our ECO6370 final project.
 
