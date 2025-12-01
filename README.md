@@ -91,6 +91,3 @@ S&P 500 index historical Data
 - Data source: kaggle for both.
 
 
-
->>>>>>> c76f119b110fe4a612d98e7362d7605fe0137ce5
-
