@@ -2,7 +2,8 @@
           # Sentiment Scoring #
 
 # packages #
-install.packages (c(tidyverse, tokenizers, stringer, textstem, wordcloud, Mass, class, rpart, raondomForest, gbm, caret, broom))
+install.packages (c("tidyverse", "tokenizers", "stringer", "textstem", "wordcloud", "Mass", "class", "rpart", "raondomForest", "gbm", "caret", "broom"))
+
 library(tidyverse)
 library(tokenizers)   # sentence tokenization
 library(stringr)      # regex & str_squish
