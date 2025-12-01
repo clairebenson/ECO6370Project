@@ -50,7 +50,7 @@ ggplot(final_clean,
   geom_point(size = 3) +
   labs(
     title = "Sentiment vs Percentage Price Change",
-    x = "Sentiment Score (-1,0,1)",
+    x = "Sentiment Score (-1,1)",
     y = "SP500 Price Change (%)"
   ) +
   theme_minimal()
