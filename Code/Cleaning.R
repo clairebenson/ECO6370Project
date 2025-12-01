@@ -2,7 +2,7 @@
           # Data Cleaning #
 
 # packages #
-install.packages (c("tidyverse", "tokenizers", "stringer", "textstem", "wordcloud", "Mass", "class", "rpart", "raondomForest", "gbm", "caret", "broom"))
+install.packages (c("tidyverse", "tokenizers", "stringr", "textstem", "wordcloud", "Mass", "class", "rpart", "raondomForest", "gbm", "caret", "broom"))
 
 library(tidyverse)
 library(tokenizers)  
