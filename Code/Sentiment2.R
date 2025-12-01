@@ -1,6 +1,6 @@
 # Hawish/Dovish sentiment Scoring #
 
-install.packages (c(tidyverse, tokenizers, stringer, textstem, wordcloud, Mass, class, rpart, raondomForest, gbm, caret, broom))
+install.packages (c(tidyverse, tokenizers, stringr, textstem, wordcloud, Mass, class, rpart, randomForest, gbm, caret, broom))
 library(tidyverse)
 library(tokenizers)   
 library(stringr)     
