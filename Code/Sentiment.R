@@ -2,10 +2,6 @@
 
 # packages #
 install.packages (c("tidyverse", "tokenizers", "stringer", "textstem", "wordcloud", "Mass", "class", "rpart", "raondomForest", "gbm", "caret", "broom"))
-<<<<<<< HEAD
-=======
-
->>>>>>> 5f315ad3476ec1db2c01db1b13cc0d94408ec39d
 library(tidyverse)
 library(tokenizers)   # sentence tokenization
 library(stringr)      
