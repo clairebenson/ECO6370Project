@@ -23,48 +23,6 @@ library(pROC)
 
 final_clean <- read.csv("final_clean.csv", stringsAsFactors = FALSE)
 
- 
-#1. exploratory data analysis #
-#1.1. wordcloud #
-
-all_text <- paste(final_clean$Text, collapse = " ")
-words    <- unlist(str_split(all_text, "\\s+"))
-words    <- lemmatize_words(words)
-words    <- words[nchar(words) > 0]
-
-freq <- table(words)
-set.seed(123)
-wordcloud(
-  names(freq),
-  freq,
-  max.words    = 200,
-  scale        = c(4, 0.5),
-  random.order = FALSE
-)
-
-#1.2. scatterplot #
-
-ggplot(final_clean,
-       aes(x = Sentiment1_Numerical,
-           y = spchange,
-           colour = Sentiment1)) +
-  geom_point(size = 3) +
-  labs(
-    title = "Sentiment vs Percentage Price Change",
-    x = "Sentiment Score (-1,1)",
-    y = "SP500 Price Change (%)"
-  ) +
-  theme_minimal()
-
-#1.3. sentiment table #
-
-sentiment_counts <- table(final_clean$Sentiment1)
-print(as.data.frame(sentiment_counts))
-
-sentiment_stock_counts <- final_clean %>%
-  count(spchange, Sentiment1, name = "Count")
-print(sentiment_stock_counts)
-
 
 #2. regression & classification models #
 
