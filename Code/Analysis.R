@@ -2,7 +2,7 @@
             # Analysis #
 
 # Packages #
-install.packages (c("tidyverse", "tokenizers", "stringr", "textstem", "wordcloud", "MASS", "class", "rpart", "randomForest", "gbm", "caret", "broom"))
+install.packages (c("tidyverse", "pROC", "tokenizers", "stringr", "textstem", "wordcloud", "MASS", "class", "rpart", "randomForest", "gbm", "caret", "broom"))
 
 library(tidyverse)
 library(stringr)
@@ -17,6 +17,7 @@ library(randomForest)
 library(gbm)         
 library(caret)        
 library(broom)        
+library(pROC)
 
 # analysis data#
 
@@ -85,14 +86,17 @@ logreg_model <- glm(
 )
 
 summary(logreg_model)
-tidy(logreg_model)
 
-# Prediction accuracy
+
+# ROC object
 prob <- predict(logreg_model, newdata = test, type = "response")
-pred <- ifelse(prob > 0.5, 1, 0)
-logit_accuracy <- mean(pred == test$SPchange_Numerical)
-cat("Logistic regression accuracy:", round(logit_accuracy, 3), "\n")
+roc_obj <- roc(response = test$SPchange_Numerical,
+               predictor = prob)
 
+plot(roc_obj,
+     col  = "#354CA1",
+     main = "ROC Curve for SPchange Prediction")
+auc(roc_obj)
 
 #2.2. classification models.
 
