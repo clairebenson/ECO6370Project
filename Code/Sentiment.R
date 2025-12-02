@@ -46,24 +46,7 @@ negative_words <- c(
   "weaker","weakness"
 )
 
-
-dovish_words <- c("accommodate", "accommodation", "borrowing",
-                  "devastation", "downturn", "recession",
-                  "slowdown", "stimulate", "stimulus", "unemployment")
-
-hawkish_words <- c("business", "businesses", "demand", "economic",
-             "economy", "employment", "energy", "equities",
-             "equity", "expansion", "financial", "growth",
-             "housing", "income", "indicators", "inflation",
-             "inflationary", "investment", "investments", "labor",
-             "manufacturing", "outlook", "output", "price",
-             "prices", "production", "recovery", "resource",
-             "securities", "slack", "spending", "target",
-             "toll", "wage", "wages")
-
-
 sentiment_mapping1 <- c(positive = 1, negative = 0)
-sentiment_mapping2 <- c(hawkish = 1, dovish = 0)
 
 final_clean <- read.csv("final_clean.csv")
 
@@ -83,28 +66,18 @@ final_clean <- final_clean %>% filter(Sentiment1 != "neutral")
 
 final_clean$Sentiment1_Numerical <- unname(sentiment_mapping1[final_clean$Sentiment1])
 
-#sentiment2 is for dovish/hawkish word classification
-calculate_sentiment2 <- function(text) {
-  w <- unlist(str_split(text, "\\s+"))
-  num_dovish <- sum(w %in% dovish_words)
-  num_hawkish <- sum(w %in% hawkish_words)
-  
-  if (num_dovish > num_hawkish) {"dovish"} else if (num_hawkish > num_dovish) {"hawkish" } else {"neutral"}
-}
-
-final_clean$Sentiment2 <- vapply(final_clean$Text,calculate_sentiment2,FUN.VALUE = character(1))
-
-# Remove neutral sentiments for Sentiment2
-final_clean <- final_clean %>% filter(Sentiment2 != "neutral")
-
-final_clean$Sentiment2_Numerical <- unname(sentiment_mapping2[final_clean$Sentiment2])
-
 # add stock move and sentiment dummies 
-final_clean$changepercent = ((final_clean$close - final_clean$open) / final_clean$open)*100
+final_clean$sp_changepercent = ((final_clean$sp_close - final_clean$sp_open) / final_clean$sp_open)*100
 
-final_clean <- final_clean %>% mutate(spchange = case_when(`changepercent` < 0 ~ "down",`changepercent` == 0 ~ "zero",TRUE ~ "up"))
+final_clean$dj_changepercent = ((final_clean$dj_close - final_clean$dj_open) / final_clean$dj_open)*100
+
+final_clean <- final_clean %>% mutate(spchange = case_when(`sp_changepercent` < 0 ~ "down",`sp_changepercent` == 0 ~ "zero",TRUE ~ "up"))
+
+final_clean <- final_clean %>% mutate(djchange = case_when(`dj_changepercent` < 0 ~ "down",`dj_changepercent` == 0 ~ "zero",TRUE ~ "up"))
 
 final_clean$SPchange_Numerical <- ifelse(final_clean$spchange == "up", 1, 0)
+
+final_clean$DJchange_Numerical <- ifelse(final_clean$djchange == "up", 1, 0)
 
 # save data 
 write.csv(final_clean, "final_clean.csv", row.names = FALSE)

@@ -12,6 +12,7 @@ library(stringr)
 ### Importing datasets
 st <- read_csv("Data/communications.csv")
 sk <- read_csv("Data/sap500.csv")
+dj <- read_csv("Data/DJ_data.csv")
 
 statement <- subset(st, Type == "Statement")
 
@@ -43,14 +44,30 @@ statement <- statement %>%
 sk <- sk %>%
   rename(
     date = Date,
-    open = Open,
-    close = Close,
+    sp_open = Open,
+    sp_close = Close,
     #change = change_percent
   )
+
+dj <- dj %>%
+  rename(
+    date = Date,
+    dj_open = Open,
+    dj_close = Close
+  ) %>%
+  select(date, dj_open, dj_close) %>%
+  mutate(date = mdy(date)) %>%  # Use lubridate's mdy() for "Month/Day/Year" format
+  filter(date %in% statement$date)
 
 
 ### Merge datasets on "Date"
 final_clean <- inner_join(statement, sk, by = "date")
 
-### Save merged dataset
+#Merge datasets on "date"
+final_clean <- statement %>%
+  inner_join(sk, by = "date") %>%
+  left_join(dj, by = "date")
+
+#Save merged dataset
 write_csv(final_clean, "final_clean.csv")
+
