@@ -18,6 +18,7 @@ library(gbm)
 library(caret)        
 library(broom)        
 library(pROC)
+library (knitr)
 
 # analysis data#
 
@@ -67,29 +68,30 @@ train <- final_clean[train_idx, ]
 test  <- final_clean[-train_idx, ]
 
 # Fit logistic regression
-logreg_model <- glm(
-  SPchange_Numerical~ Sentiment1_Numerical,
+logreg_model2 <- glm(
+  DJchange_Numerical~ Sentiment1_Numerical,
   data   = train,
   family = binomial(link = "logit")
 )
-reg_table <- tidy(logreg_model)
+reg_table <- tidy(logreg_model2)
 
 kable(reg_table, 
-      caption = "Table: Logistic Regression of SP Change on Sentiment")
+      caption = "Table: Logistic Regression of DJ Change on Sentiment")
 
-prob <- predict(logreg_model, newdata = test, type = "response")
+prob <- predict(logreg_model2, newdata = test, type = "response")
 roc_obj <- roc(response = test$SPchange_Numerical,
                predictor = prob)
 
 plot(roc_obj,
      col = "#354CA1",
-     main = "ROC Curve for SPchange Prediction",
+     main = "ROC Curve for djchange Prediction",
      legacy.axes = TRUE)
 auc(roc_obj)
 
 
 #2.2. classification models.
 
+#SP
 set.seed(42)
 train_idx <- createDataPartition(final_clean$spchange, p = 0.8, list = FALSE)
 
@@ -166,3 +168,83 @@ for (m in models) {
 # Display clean table
 kable(acc_results, 
       caption = "Classification Model Accuracy (Test & CV)")
+
+#DJ
+
+set.seed(42)
+train_idx <- createDataPartition(final_clean$spchange, p = 0.8, list = FALSE)
+
+train_cls <- final_clean[train_idx, ]
+test_cls  <- final_clean[-train_idx, ]
+
+ctrl <- trainControl(method="cv", number=5)
+
+models <- c("lda","qda","knn","rpart","rf","gbm")
+
+for (m in models) {
+  set.seed(42)
+  fit <- train(
+    djchange ~ Sentiment1_Numerical,
+    data = train_cls,
+    method = m,
+    trControl = ctrl
+  )
+  
+  # Prediction
+  pred_test <- predict(fit, newdata = test_cls)
+  test_acc  <- mean(pred_test == test_cls$djchange)
+  
+  cat("Model:", m, 
+      " | Test Accuracy:", round(test_acc,3),
+      " | CV Accuracy:", round(max(fit$results$Accuracy),3), "\n")
+}
+
+set.seed(42)
+train_idx <- createDataPartition(final_clean$djchange, p = 0.8, list = FALSE)
+
+train_cls <- final_clean[train_idx, ]
+test_cls  <- final_clean[-train_idx, ]
+
+ctrl <- trainControl(method = "cv", number = 5)
+
+models <- c("lda","qda","knn","rpart","rf","gbm")
+
+# Create empty results storage
+acc_results <- data.frame(
+  Model = character(),
+  Test_Accuracy = numeric(),
+  CV_Accuracy = numeric(),
+  stringsAsFactors = FALSE
+)
+
+for (m in models) {
+  set.seed(42)
+  fit <- train(
+    djchange ~ Sentiment1_Numerical,
+    data = train_cls,
+    method = m,
+    trControl = ctrl
+  )
+  
+  # Test accuracy
+  pred_test <- predict(fit, newdata = test_cls)
+  test_acc  <- mean(pred_test == test_cls$djchange)
+  
+  # Cross-validation accuracy (best tuning parameter)
+  cv_acc <- max(fit$results$Accuracy)
+  
+  # Store results in the table
+  acc_results <- rbind(
+    acc_results,
+    data.frame(
+      Model = m,
+      Test_Accuracy = round(test_acc, 3),
+      CV_Accuracy = round(cv_acc, 3)
+    )
+  )
+}
+
+# Display clean table
+kable(acc_results, 
+      caption = "Classification Model Accuracy (Test & CV)")
+
