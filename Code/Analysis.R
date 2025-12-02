@@ -46,7 +46,7 @@ reg_table <- tidy(logreg_model)
 kable(reg_table, 
       caption = "Table: Logistic Regression of SP Change on Sentiment")
 
-# ROC object
+# ROC object for SP
 prob <- predict(logreg_model, newdata = test, type = "response")
 roc_obj <- roc(response = test$SPchange_Numerical,
                predictor = prob)
@@ -56,6 +56,37 @@ plot(roc_obj,
      main = "ROC Curve for SPchange Prediction",
      legacy.axes = TRUE)
 auc(roc_obj)
+
+
+# DJ
+# Train-test split
+set.seed(42)
+train_idx <- sample(seq_len(nrow(final_clean)), size = 0.8 * nrow(final_clean))
+
+train <- final_clean[train_idx, ]
+test  <- final_clean[-train_idx, ]
+
+# Fit logistic regression
+logreg_model <- glm(
+  SPchange_Numerical~ Sentiment1_Numerical,
+  data   = train,
+  family = binomial(link = "logit")
+)
+reg_table <- tidy(logreg_model)
+
+kable(reg_table, 
+      caption = "Table: Logistic Regression of SP Change on Sentiment")
+
+prob <- predict(logreg_model, newdata = test, type = "response")
+roc_obj <- roc(response = test$SPchange_Numerical,
+               predictor = prob)
+
+plot(roc_obj,
+     col = "#354CA1",
+     main = "ROC Curve for SPchange Prediction",
+     legacy.axes = TRUE)
+auc(roc_obj)
+
 
 #2.2. classification models.
 
