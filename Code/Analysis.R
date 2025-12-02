@@ -23,7 +23,6 @@ library(pROC)
 
 final_clean <- read.csv("final_clean.csv", stringsAsFactors = FALSE)
 
-
 #2. regression & classification models #
 
 #2.1. logistic regression #
@@ -42,9 +41,10 @@ logreg_model <- glm(
   data   = train,
   family = binomial(link = "logit")
 )
+reg_table <- tidy(logreg_model)
 
-summary(logreg_model)
-
+kable(reg_table, 
+      caption = "Table: Logistic Regression of SP Change on Sentiment")
 
 # ROC object
 prob <- predict(logreg_model, newdata = test, type = "response")
@@ -87,3 +87,51 @@ for (m in models) {
       " | CV Accuracy:", round(max(fit$results$Accuracy),3), "\n")
 }
 
+set.seed(42)
+train_idx <- createDataPartition(final_clean$spchange, p = 0.8, list = FALSE)
+
+train_cls <- final_clean[train_idx, ]
+test_cls  <- final_clean[-train_idx, ]
+
+ctrl <- trainControl(method = "cv", number = 5)
+
+models <- c("lda","qda","knn","rpart","rf","gbm")
+
+# Create empty results storage
+acc_results <- data.frame(
+  Model = character(),
+  Test_Accuracy = numeric(),
+  CV_Accuracy = numeric(),
+  stringsAsFactors = FALSE
+)
+
+for (m in models) {
+  set.seed(42)
+  fit <- train(
+    spchange ~ Sentiment1_Numerical,
+    data = train_cls,
+    method = m,
+    trControl = ctrl
+  )
+  
+  # Test accuracy
+  pred_test <- predict(fit, newdata = test_cls)
+  test_acc  <- mean(pred_test == test_cls$spchange)
+  
+  # Cross-validation accuracy (best tuning parameter)
+  cv_acc <- max(fit$results$Accuracy)
+  
+  # Store results in the table
+  acc_results <- rbind(
+    acc_results,
+    data.frame(
+      Model = m,
+      Test_Accuracy = round(test_acc, 3),
+      CV_Accuracy = round(cv_acc, 3)
+    )
+  )
+}
+
+# Display clean table
+kable(acc_results, 
+      caption = "Classification Model Accuracy (Test & CV)")
