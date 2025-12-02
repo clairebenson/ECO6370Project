@@ -9,6 +9,7 @@ library(textstem)    # lematización (lemmatize_words() / lemmatize_strings())
 library(wordcloud)   # wordcloud tradicional
 library(RColorBrewer)#colors
 library(ggplot2)    
+library (knitr)
 
 ### preliminary analysis
 
@@ -98,6 +99,13 @@ ggplot(final_clean, aes(x = Sentiment2_Numerical, y = changepercent, color = Sen
        y = "Price Change") +
   theme_minimal()
 
+#Scatter plot of sentimet1 with spchange
+ggplot(final_clean,
+       aes(x = Sentiment1_Numerical,
+           y = spchange,
+           colour = Sentiment1)) +
+  geom_point(size = 3)
+
 #Table counts
 all_sentiments1 <- c("positive", "negative")
 all_sentiments2 <- c("hawkish", "dovish")
@@ -109,13 +117,26 @@ sentiment_table <- bind_rows(
     rename(Sentiment = Sentiment1) %>%
     right_join(data.frame(Sentiment = all_sentiments1, Type = "Sentiment1"), by = c("Sentiment", "Type")) %>%
     mutate(n = replace_na(n, 0)),
-  final_clean %>% 
+    final_clean %>% 
     count(Sentiment2) %>% 
     mutate(Type = "Sentiment2") %>% 
     rename(Sentiment = Sentiment2) %>%
     right_join(data.frame(Sentiment = all_sentiments2, Type = "Sentiment2"), by = c("Sentiment", "Type")) %>%
     mutate(n = replace_na(n, 0))
 )
+
+print(sentiment_table)
+
+
+#Table only for sentiment1
+sentiment_table <- 
+  final_clean %>% 
+  count(Sentiment1) %>% 
+  mutate(Type = "Sentiment1") %>% 
+  rename(Sentiment = Sentiment1) %>%
+  right_join(data.frame(Sentiment = all_sentiments1, Type = "Sentiment1"), 
+             by = c("Sentiment", "Type")) %>%
+  mutate(n = replace_na(n, 0))
 
 print(sentiment_table)
 
@@ -134,3 +155,14 @@ sentiment_stock_counts <- bind_rows(
 )
 
 print(sentiment_stock_counts)
+
+# Joint distribution table for Sentiment1 and spchange
+
+sentiment_table <- as.data.frame(table(final_clean$Sentiment1))
+kable(sentiment_table, caption = "Table 1. Sentiment Frequency")
+
+sentiment_stock_counts <- final_clean %>% 
+  count(spchange, Sentiment1, name = "Count")
+
+kable(sentiment_stock_counts, caption = "Table 2. Sentiment × SP Change")
+
